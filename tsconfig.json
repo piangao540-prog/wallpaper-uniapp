@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "target": "esnext",
+        "module": "esnext",
+        "moduleResolution": "node",
+        "strict": true,
+        "jsx": "preserve",
+        "skipLibCheck": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "./*"
+            ]
+        }
+    },
+    "include": [
+        "pages/**/*.ts",
+        "pages/**/*.vue",
+        "components/**/*.ts",
+        "components/**/*.vue",
+        "*.ts",
+        "env.d.ts"
+    ]
+}

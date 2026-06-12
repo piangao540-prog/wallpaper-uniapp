@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./*"]
+    },
+    "ignoreDeprecations": "6.0"
+  },
+  "include": [
+    "pages/**/*",
+    "common/**/*",
+    "static/**/*",
+    "components/**/*",
+    "*.js",
+    "*.vue"
+, "main.ts"  ],
+  "exclude": [
+    "node_modules",
+    "unpackage",
+    "dist"
+  ]
+}
