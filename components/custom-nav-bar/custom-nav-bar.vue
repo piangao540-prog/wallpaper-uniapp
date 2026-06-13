@@ -1,8 +1,6 @@
 <template>
 	<view class="navBar" :style="{ background: bgColor }">
-		<!-- 状态栏占位 -->
 		<view class="statusBar" :style="{ height: statusBarHeight + 'px' }"></view>
-		<!-- 导航栏内容 -->
 		<view class="navContent" :style="{ height: navHeight + 'px' }">
 			<view class="left" @click="handleLeft">
 				<slot name="left">
@@ -15,7 +13,9 @@
 				</slot>
 			</view>
 			<view class="right">
-				<slot name="right"></slot>
+				<slot name="right">
+					<uni-icons type="search" size="22" :color="fontColor"></uni-icons>
+				</slot>
 			</view>
 		</view>
 	</view>
@@ -30,7 +30,7 @@ const props = defineProps({
 	fontColor: { type: String, default: '#fff' },
 	titleSize: { type: Number, default: 32 },
 	showBack: { type: Boolean, default: false },
-	navHeight: { type: Number, default: 44 }
+	navHeight: { type: Number, default: 39 }
 })
 
 const emit = defineEmits(['back'])
@@ -52,33 +52,33 @@ const handleLeft = () => {
 
 <style lang="scss" scoped>
 .navBar{
-    width: 100%;
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 999;
+	width: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 999;
+	border-bottom: 1rpx solid #f0f0f0;
 	.statusBar{
 		width: 100%;
 	}
 	.navContent{
 		display: flex;
 		align-items: center;
-		padding: 0 20rpx;
+		padding: 0 30rpx;
 		.left{
-			width: 100rpx;
+			width: 80rpx;
 			display: flex;
 			align-items: center;
-			justify-content: flex-start;
 		}
 		.center{
 			flex: 1;
 			text-align: center;
 			.title{
-				font-weight: 500;
+				font-weight: 600;
 			}
 		}
 		.right{
-			width: 100rpx;
+			width: 80rpx;
 			display: flex;
 			align-items: center;
 			justify-content: flex-end;
