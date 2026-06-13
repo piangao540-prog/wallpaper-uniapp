@@ -26,6 +26,13 @@
 			"style": {
 				"navigationBarTitleText": "分类列表"
 			}
+		},
+		{
+			"path": "pages/perview/perview",
+			"style": {
+				"navigationBarTitleText": "预览",
+				"navigationStyle": "custom"
+			}
 		}
 	],
 	"tabBar": {
