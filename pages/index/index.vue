@@ -1,5 +1,6 @@
 <template>
-	<view class="homeLayout pageBg">
+	<view class="homeLayout pageBg" :style="{ paddingTop: navBarH + 'px' }">
+		<custom-nav-bar title="AI壁纸" bgColor="#fff" fontColor="#333"></custom-nav-bar>
 		<view class="banner">
 			<swiper indicator-dots indicator-color="rgba(242, 233, 220, 0.63)"
 			indicator-active-color="#fff" autoplay interval="3000">
@@ -56,7 +57,14 @@
 </template>
 
 <script setup>
+import {ref, onMounted} from "vue"
+const navBarH = ref(0)
 
+
+onMounted(() => {
+	const info = uni.getSystemInfoSync()
+	navBarH.value = (info.statusBarHeight || 20) + 44
+})
 </script>
 
 <style lang="scss" scoped>
