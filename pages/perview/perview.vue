@@ -8,8 +8,8 @@
 		<!-- 遮罩层 -->
 		<view class="mask" v-show="maskState" @click="maskChang">
 			<view class="top">
-				<view class="goBack">
-					<uni-icons type="arrowleft" size="28" color="#fff"></uni-icons>
+				<view class="goBack" @click="gotoBack">
+					<uni-icons type="back" size="28" color="#fff"></uni-icons>
 				</view>
 				<view class="count">3 / 99</view>
 			</view>
@@ -100,6 +100,7 @@ const popup = ref(null)
 const ratePopup = ref(null)
 const rateVal = ref(3)
 
+
 const rateText = computed(() => {
 	const map = {1: '非常差', 2: '较差', 3: '一般', 4: '较好', 5: '非常好'}
 	return map[rateVal.value] || ''
@@ -120,6 +121,11 @@ const submitRate = () => {
 // 遮罩切换
 const maskChang = () => {
 	maskState.value = !maskState.value
+}
+
+// 返回按钮
+const gotoBack = () =>{
+	uni.navigateBack()
 }
 </script>
 

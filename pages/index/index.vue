@@ -36,7 +36,7 @@
 				</template>
 			</common-title>
 			<scroll-view scroll-x class="scroll-x">
-				<view class="box" v-for="item in 8">
+				<view class="box" v-for="item in 8" @click="gotoPerview">
 					<image src="/common/images/preview_small.webp"></image>
 				</view>
 			</scroll-view>
@@ -57,16 +57,15 @@
 </template>
 
 <script setup>
-// import {ref, onMounted} from "vue"
 import {useNavBar} from '@/composables/useNavBar'
-
 const {navBarH} = useNavBar()
 
+const gotoPerview = () => {
+	uni.navigateTo({
+		url:'/pages/perview/perview'
+	})
+}
 
-// onMounted(() => {
-// 	const info = uni.getSystemInfoSync()
-// 	navBarH.value = (info.statusBarHeight || 20) + 44
-// })
 </script>
 
 <style lang="scss" scoped>

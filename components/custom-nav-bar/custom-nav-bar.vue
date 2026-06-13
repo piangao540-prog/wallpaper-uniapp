@@ -2,10 +2,7 @@
 	<view class="navBar" :style="{ background: bgColor }">
 		<view class="statusBar" :style="{ height: statusBarHeight + 'px' }"></view>
 		<view class="navContent" :style="{ height: navHeight + 'px' }">
-			<view class="left" @click="handleLeft">
-				<slot name="left">
-					<uni-icons v-if="showBack" type="arrowleft" size="22" :color="fontColor"></uni-icons>
-				</slot>
+			<view class="left"> 
 			</view>
 			<view class="center">
 				<slot name="center">
@@ -33,7 +30,6 @@ const props = defineProps({
 	navHeight: { type: Number, default: 39 }
 })
 
-const emit = defineEmits(['back'])
 const statusBarHeight = ref(20)
 
 onMounted(() => {
@@ -45,9 +41,7 @@ onMounted(() => {
 	// #endif
 })
 
-const handleLeft = () => {
-	if (props.showBack) emit('back')
-}
+
 </script>
 
 <style lang="scss" scoped>

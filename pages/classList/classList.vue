@@ -1,7 +1,7 @@
 <template>
 	<view class="classList">
 		<view  class="content">
-			<navigator class="item" v-for="item in 9">
+			<navigator url='/pages/perview/perview' class="item" v-for="item in 9">
 				<image src="@/common/images/preview2.jpg" mode="aspectFill"></image>
 			</navigator>
 		</view>
