@@ -1,5 +1,6 @@
 <template>
-	<view class="userLayout pageBg">
+	<view class="userLayout pageBg" :style="{ paddingTop: navBarH + 'px' }">
+		<custom-nav-bar title="个人中心" bgColor="#fff" fontColor="#333"></custom-nav-bar>
 		<view class="userInfo">
 			<view class="avatar">
 				<image src="@/static/images/xxmLogo.png" mode="aspectFill"></image>
@@ -55,6 +56,7 @@
 
 <script setup>
 import {ref} from 'vue'
+import { useNavBar } from '@/composables/useNavBar'
 const topList = ref([
   { icon: 'upload', text: '我的下载', value: '334',page: '/pages/classList/classList' },
   { icon: 'star',   text: '我的收藏', value: '128',page: '/pages/classList/classList' },
@@ -75,6 +77,9 @@ const phone = () => {
 const goPage = (url) => {
 	if (url) uni.navigateTo({url})
 }
+
+// 标题距离计算
+const {navBarH} = useNavBar()
 </script>
 
 <style lang="scss" scoped>

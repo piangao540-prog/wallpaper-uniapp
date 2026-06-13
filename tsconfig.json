@@ -4,6 +4,7 @@
         "module": "esnext",
         "moduleResolution": "bundler",
         "ignoreDeprecations": "6.0",
+        "types": ["@dcloudio/types"],
         "strict": true,
         "jsx": "preserve",
         "skipLibCheck": true,

@@ -1,12 +1,16 @@
 <template>
-    <view class="classifyLayout">
+    <view class="classifyLayout" :style="{ paddingTop: navBarH + 'px' }">
+        <custom-nav-bar title="分类" bgColor="#fff" fontColor="#333"></custom-nav-bar>
         <view class="classify">
             <theme-item v-for="item in 9"></theme-item>
         </view>
     </view>
 </template>
 
-<script setup></script>
+<script setup>
+import { useNavBar } from '@/composables/useNavBar'
+const {navBarH} = useNavBar()
+</script>
 
 <style lang="scss" scoped>
 .classifyLayout{

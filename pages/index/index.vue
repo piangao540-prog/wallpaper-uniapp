@@ -57,14 +57,16 @@
 </template>
 
 <script setup>
-import {ref, onMounted} from "vue"
-const navBarH = ref(0)
+// import {ref, onMounted} from "vue"
+import {useNavBar} from '@/composables/useNavBar'
+
+const {navBarH} = useNavBar()
 
 
-onMounted(() => {
-	const info = uni.getSystemInfoSync()
-	navBarH.value = (info.statusBarHeight || 20) + 44
-})
+// onMounted(() => {
+// 	const info = uni.getSystemInfoSync()
+// 	navBarH.value = (info.statusBarHeight || 20) + 44
+// })
 </script>
 
 <style lang="scss" scoped>
