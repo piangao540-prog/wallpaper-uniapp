@@ -23,15 +23,15 @@
 			</view>
 			<view class="footer" @click.stop>
 				<view class="box" @click.stop="openInfo">
-					<uni-icons type="info" size="25"></uni-icons>
+					<uni-icons type="info" size="25" color="#fff"></uni-icons>
 					<view class="text">信息</view>
 				</view>
-				<view class="box" @click.stop="openRate">
-					<uni-icons type="star" size="25"></uni-icons>
-					<view class="text">评分</view>
+				<view class="box" @click.stop="toggleFavorite">
+					<uni-icons :type="isFavorited ? 'star-filled' : 'star'" size="25" :color="isFavorited ? '#f5c842' : '#fff'"></uni-icons>
+					<view class="text">收藏</view>
 				</view>
 				<view class="box">
-					<uni-icons type="download" size="25"></uni-icons>
+					<uni-icons type="download" size="25" color="#fff"></uni-icons>
 					<view class="text">下载</view>
 				</view>
 			</view>
@@ -57,15 +57,8 @@
 							<text selectable class="value">美女</text>
 						</view>
 						<view class="row">
-							<view class="label">发布者:</view>
+							<view class="label">作者:</view>
 							<text selectable class="value">piangao</text>
-						</view>
-						<view class="row">
-							<view class="label">评分:</view>
-							<view class="value rateBox">
-								<uni-rate readonly touchable="false" value="3"/>
-								<text class="score">5分</text>
-							</view>
 						</view>
 						<view class="row">
 							<view class="label">标签:</view>
@@ -77,44 +70,27 @@
 				</scroll-view>
 			</view>
 		</uni-popup>
-		<!-- 评分弹窗 -->
-		<uni-popup ref="ratePopup" type="center" :is-mask-click="false">
-			<view class="ratePop">
-				<view class="rateTitle">给壁纸评分</view>
-				<uni-rate v-model="rateVal" :size="40" color="#555" active-color="#f5c842" margin="10"/>
-				<view class="rateText">{{ rateText }}</view>
-				<view class="rateBtn" @click="submitRate">提交评分</view>
-				<view class="rateClose" @click="closeRate">
-					<uni-icons type="closeempty" size="16" color="#888"></uni-icons>
-				</view>
-			</view>
-		</uni-popup>
 	</view>
 </template>
 
 <script setup>
-import {ref, computed} from 'vue'
+import {ref} from 'vue'
 
 const maskState = ref(true)
 const popup = ref(null)
-const ratePopup = ref(null)
-const rateVal = ref(3)
-
-const rateText = computed(() => {
-	const map = {1: '非常差', 2: '较差', 3: '一般', 4: '较好', 5: '非常好'}
-	return map[rateVal.value] || ''
-})
+const isFavorited = ref(false)
 
 // 信息弹窗
 const openInfo = () => popup.value.open()
 const closeInfo = () => popup.value.close()
 
-// 评分弹窗
-const openRate = () => ratePopup.value.open()
-const closeRate = () => ratePopup.value.close()
-const submitRate = () => {
-	uni.showToast({title: `评分成功：${rateVal.value}分`, icon: 'success'})
-	closeRate()
+// 收藏
+const toggleFavorite = () => {
+	isFavorited.value = !isFavorited.value
+	uni.showToast({
+		title: isFavorited.value ? '已收藏' : '已取消收藏',
+		icon: 'none'
+	})
 }
 
 // 遮罩切换
@@ -122,7 +98,7 @@ const maskChang = () => {
 	maskState.value = !maskState.value
 }
 
-// 返回按钮
+// 返回
 const gotoBack = () =>{
 	uni.navigateBack()
 }
@@ -155,12 +131,6 @@ const gotoBack = () =>{
 		justify-content: space-between;
 		padding: 100rpx 0 80rpx;
 		// #ifdef H5
-		pointer-events: none;
-		.top, .center, .footer{
-			pointer-events: auto;
-		}
-		// #endif
-		// #ifdef MP
 		pointer-events: none;
 		.top, .center, .footer{
 			pointer-events: auto;
@@ -273,15 +243,6 @@ const gotoBack = () =>{
 						color: #ccc;
 						font-size: 28rpx;
 					}
-					.rateBox{
-						display: flex;
-						align-items: center;
-						.score{
-							padding-left: 10rpx;
-							color: #999;
-							font-size: 26rpx;
-						}
-					}
 					.tabs{
 						display: flex;
 						flex-wrap: wrap;
@@ -300,41 +261,6 @@ const gotoBack = () =>{
 					border-bottom: none;
 				}
 			}
-		}
-	}
-	// 评分弹窗
-	.ratePop{
-		background: #1a1a1a;
-		border-radius: 24rpx;
-		padding: 50rpx 60rpx;
-		text-align: center;
-		position: relative;
-		.rateTitle{
-			color: #fff;
-			font-size: 34rpx;
-			font-weight: 600;
-			margin-bottom: 40rpx;
-		}
-		.rateText{
-			color: #f5c842;
-			font-size: 28rpx;
-			margin-top: 24rpx;
-			min-height: 40rpx;
-		}
-		.rateBtn{
-			background: linear-gradient(135deg, #28b389, #1a8a6a);
-			color: #fff;
-			font-size: 30rpx;
-			padding: 20rpx 0;
-			border-radius: 50rpx;
-			margin-top: 36rpx;
-			font-weight: 500;
-		}
-		.rateClose{
-			position: absolute;
-			top: 20rpx;
-			right: 24rpx;
-			padding: 10rpx;
 		}
 	}
 }
