@@ -6,7 +6,7 @@
 			</swiper-item>
 		</swiper>
 		<!-- 遮罩层 -->
-		<view class="mask" v-show="maskState" @click="maskChang">
+		<view class="mask" v-if="maskState" @click="maskChang">
 			<view class="top">
 				<view class="goBack" @click="gotoBack">
 					<uni-icons type="back" size="28" color="#fff"></uni-icons>
@@ -21,7 +21,7 @@
 					<uni-dateformat :date="new Date()" format="MM月/dd日"></uni-dateformat>
 				</view>
 			</view>
-			<view class="footer">
+			<view class="footer" @click.stop>
 				<view class="box" @click.stop="openInfo">
 					<uni-icons type="info" size="25"></uni-icons>
 					<view class="text">信息</view>
@@ -100,7 +100,6 @@ const popup = ref(null)
 const ratePopup = ref(null)
 const rateVal = ref(3)
 
-
 const rateText = computed(() => {
 	const map = {1: '非常差', 2: '较差', 3: '一般', 4: '较好', 5: '非常好'}
 	return map[rateVal.value] || ''
@@ -145,7 +144,7 @@ const gotoBack = () =>{
 	}
 	// 遮罩
 	.mask{
-		position: absolute;
+		position: fixed;
 		top: 0;
 		left: 0;
 		right: 0;
@@ -155,10 +154,18 @@ const gotoBack = () =>{
 		flex-direction: column;
 		justify-content: space-between;
 		padding: 100rpx 0 80rpx;
+		// #ifdef H5
 		pointer-events: none;
 		.top, .center, .footer{
 			pointer-events: auto;
 		}
+		// #endif
+		// #ifdef MP
+		pointer-events: none;
+		.top, .center, .footer{
+			pointer-events: auto;
+		}
+		// #endif
 		.top{
 			display: flex;
 			justify-content: space-between;
@@ -244,6 +251,7 @@ const gotoBack = () =>{
 		}
 		scroll-view{
 			min-height: 40vh;
+			max-height: 60vh;
 			.content{
 				padding-top: 10rpx;
 				.row{
