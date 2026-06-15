@@ -36,8 +36,8 @@
 				</template>
 			</common-title>
 			<scroll-view scroll-x class="scroll-x">
-				<view class="box" v-for="item in 8" @click="gotoPerview">
-					<image src="/common/images/preview_small.webp"></image>
+				<view class="box" v-for="item in wallpaperList.slice(0,6)" @click="gotoPerview">
+					<image :src="item.url" mode="aspectFill" :style="{ width: '100%', height: '100%' }"></image>
 				</view>
 			</scroll-view>
 		</view>
@@ -56,8 +56,12 @@
 	</view>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import {ref, onMounted} from 'vue'
 import {useNavBar} from '@/composables/useNavBar'
+import {getWallpapers, Wallpaper} from '@/api/wallpaper'
+
+const wallpaperList = ref<Wallpaper[]>([])
 const {navBarH} = useNavBar()
 
 const gotoPerview = () => {
@@ -66,6 +70,9 @@ const gotoPerview = () => {
 	})
 }
 
+onMounted(async() => {
+	wallpaperList.value = await getWallpapers()
+})
 </script>
 
 <style lang="scss" scoped>
