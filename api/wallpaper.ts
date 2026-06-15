@@ -1,4 +1,4 @@
-import {request} from './request'
+import http from './request'
 
 export interface Wallpaper {
     id: number
@@ -9,10 +9,8 @@ export interface Wallpaper {
     likes: number
 }
 
-export const getWallpaper = () => {
-    request<Wallpaper[]>('/wallpapers')
-}
+export const getWallpapers = () =>
+    http.get<Wallpaper[]>('/wallpapers').then(res => res.data)
 
-export const getByCategory = (cat:string) => {
-    request<Wallpaper[]>(`/wallpapers/${cat}`)
-}
+export const getByCategory = (cat: string) =>
+    http.get<Wallpaper[]>(`/wallpapers/${cat}`).then(res => res.data)
