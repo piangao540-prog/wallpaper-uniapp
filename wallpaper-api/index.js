@@ -29,6 +29,15 @@ app.get('/api/wallpapers', (req, res) => {
         res.json(results)
     })
 })
+
+// 获取最新文章
+app.get('/api/wallpapers/latest', (req, res) => {
+    db.query('SELECT * FROM wallpapers ORDER BY id DESC LIMIT 8', (err, results) => {
+        if (err) return res.status(500).json({ error: err.message })
+        res.json(results)
+    })
+})
+
 // 根据种类获取壁纸信息
 app.get('/api/wallpapers/:category', (req, res) => {
     db.query('SELECT * FROM wallpapers WHERE category=?', [req.params.category], (err, results) => {
@@ -36,6 +45,8 @@ app.get('/api/wallpapers/:category', (req, res) => {
         res.json(results)
     })
 })
+
+
 
 app.listen(3000, () => {
     console.log('api')
