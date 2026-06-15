@@ -4,8 +4,8 @@
 		<view class="banner">
 			<swiper indicator-dots indicator-color="rgba(242, 233, 220, 0.63)"
 			indicator-active-color="#fff" autoplay interval="3000">
-				<swiper-item v-for="item in 3">
-					<image src="/common/images/banner1.jpg" mode="aspectFill"></image>
+				<swiper-item v-for="item in bannerList">
+					<image :src="item.url" mode="aspectFill"></image>
 				</swiper-item>
 			</swiper>
 		</view>
@@ -59,11 +59,13 @@
 <script setup lang="ts">
 import {ref, onMounted} from 'vue'
 import {useNavBar} from '@/composables/useNavBar'
-import {getWallpapers, Wallpaper, getLatest} from '@/api/wallpaper'
+import {getWallpapers, Wallpaper, getLatest,getByCategory} from '@/api/wallpaper'
 
 const latestWallpaper = ref<Wallpaper[]>([])
-const {navBarH} = useNavBar()
+const bannerList = ref<Wallpaper[]>([])
 
+
+const {navBarH} = useNavBar()
 const gotoPerview = () => {
 	uni.navigateTo({
 		url:'/pages/perview/perview'
@@ -72,6 +74,7 @@ const gotoPerview = () => {
 
 onMounted(async() => {
 	latestWallpaper.value = await getLatest()
+	bannerList.value = await getByCategory('Yoneyama Mai')
 })
 </script>
 
