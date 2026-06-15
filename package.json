@@ -19,6 +19,9 @@
   },
   "homepage": "https://github.com/piangao540-prog/wallpaper-uniapp#readme",
   "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "mysql2": "^3.22.5",
     "vue": "^3.5.38"
   },
   "devDependencies": {
