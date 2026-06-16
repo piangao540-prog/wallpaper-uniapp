@@ -1,8 +1,8 @@
 <template>
 	<view class="preview">
-		<swiper circular>
-			<swiper-item v-for="item in 5">
-				<image @click="maskChang" src="@/common/images/preview1.jpg" mode="aspectFill"></image>
+		<swiper circular :current="currentIndex">
+			<swiper-item v-for="item in wallpaperList">
+				<image @click="maskChang" :src="item.url" mode="aspectFill"></image>
 			</swiper-item>
 		</swiper>
 		<!-- 遮罩层 -->
@@ -73,12 +73,27 @@
 	</view>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {ref} from 'vue'
+// @ts-ignore 
+import {onLoad} from '@dcloudio/uni-app'
+import { getById, getWallpapers} from '@/api/wallpaper'
+import type { Wallpaper } from '@/api/wallpaper'
 
-const maskState = ref(true)
-const popup = ref(null)
+const maskState = ref<any>(true)
+const popup = ref<any>(null)
 const isFavorited = ref(false)
+const wallpaperList = ref<Wallpaper[]>([])
+const currentIndex = ref(0)
+
+// 获取壁纸数据
+onLoad(async (e: any) => {
+    if (e?.id) {
+		wallpaperList.value =  await getWallpapers()
+		currentIndex.value = wallpaperList.value.findIndex(a => a.id === Number(e.id))
+    }
+})
+
 
 // 信息弹窗
 const openInfo = () => popup.value.open()

@@ -24,13 +24,22 @@ db.connect(err => {
     console.log('MySQL 已连接')
 })
 
-// 获取壁纸所有信息
+
 app.get('/api/wallpapers', (req, res) => {
-    db.query('SELECT * FROM wallpapers', (err, results) => {
+    let sql = 'SELECT * FROM wallpapers'
+    let params = []
+
+    if (req.query.id) {
+        sql += ' WHERE id = ?'
+        params.push(req.query.id)
+    }
+
+    db.query(sql, params, (err, results) => {
         if (err) return res.status(500).json({ error: err.message })
-        res.json(results)
+        res.json(req.query.id ? results[0] : results)
     })
 })
+
 
 // 获取最新文章
 app.get('/api/wallpapers/latest', (req, res) => {
@@ -41,13 +50,15 @@ app.get('/api/wallpapers/latest', (req, res) => {
 })
 
 // 获取所有分类和封面图
-app.get('/api/categories',(req,res) => {
+app.get('/api/categories', (req, res) => {
     const sql = 'SELECT category,ANY_VALUE(author) as author, MIN(url) as cover,COUNT(*) as count FROM wallpapers GROUP BY category ORDER BY category'
-    db.query(sql,(err,results) => {
-        if(err) return res.status(500).json({error:err.message})
+    db.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: err.message })
         res.json(results)
     })
-}) 
+})
+
+
 
 // 根据种类获取壁纸信息
 app.get('/api/wallpapers/:category', (req, res) => {

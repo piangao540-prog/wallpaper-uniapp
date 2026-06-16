@@ -22,6 +22,9 @@ export const getWallpapers = () => request<Wallpaper[]>('/wallpapers')
 // 根据种类获取壁纸信息
 export const getByCategory = (cat: string) => request<Wallpaper[]>(`/wallpapers/${cat}`)
 
+// 根据id获取壁纸信息
+export const getById = (id:number) => request<Wallpaper[]>(`/wallpapers?id=${id}`) 
+
 // 获取最新文章
 export const getLatest = () => request<Wallpaper[]>('/wallpapers/latest')
 

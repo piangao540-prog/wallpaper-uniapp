@@ -36,7 +36,7 @@
 				</template>
 			</common-title>
 			<scroll-view scroll-x class="scroll-x">
-				<view class="box" v-for="item in latestWallpaper.slice(0,6)" @click="gotoPerview">
+				<view class="box" v-for="item in latestWallpaper.slice(0,6)" @click="gotoPerview(item.id)">
 					<image :src="item.url" mode="aspectFill" :style="{ width: '100%', height: '100%' }"></image>
 				</view>
 			</scroll-view>
@@ -76,8 +76,8 @@ const bannerList = ref<Wallpaper[]>([])
 const wallpaperList = ref<Wallpaper[]>([])
 
 const {navBarH} = useNavBar()
-const gotoPerview = () => {
-	uni.navigateTo({ url:'/pages/perview/perview' })
+const gotoPerview = (id:number) => {
+	uni.navigateTo({ url:`/pages/perview/perview?id=${id}` })
 }
 
 onMounted(async() => {
