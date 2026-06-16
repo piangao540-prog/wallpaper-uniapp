@@ -16,7 +16,7 @@
 			</view>
 			<view class="continer">
 				<swiper vertical interval="1500" duration="300" autoplay circular>
-					<swiper-item v-for="item in 3"> 公告内容。。。好啊好好啊好号好啊后好好</swiper-item>
+					<swiper-item v-for="item in 3">图片素材来自pixiv(有作者)和wallhaven(未知)</swiper-item>
 				</swiper>
 			</view>
 			<view class="right">

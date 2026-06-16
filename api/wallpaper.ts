@@ -1,4 +1,4 @@
-import http from './request'
+import { request } from './request'
 
 export interface Wallpaper {
     id: number
@@ -9,17 +9,8 @@ export interface Wallpaper {
     likes: number
 }
 
-//获取所有文章 
-export const getWallpapers = () => {
-    return http.get<Wallpaper[]>('/wallpapers').then(res => res.data)
-}
+export const getWallpapers = () => request<Wallpaper[]>('/wallpapers')
 
-// 根据种类获取文章
-export const getByCategory = (cat: string) => {
-    return http.get<Wallpaper[]>(`/wallpapers/${cat}`).then(res => res.data)
-}
+export const getByCategory = (cat: string) => request<Wallpaper[]>(`/wallpapers/${cat}`)
 
-// 获取最新文章
-export const getLatest = () => {
-    return http.get<Wallpaper[]>('/wallpapers/latest').then(res => res.data)
-}
+export const getLatest = () => request<Wallpaper[]>('/wallpapers/latest')

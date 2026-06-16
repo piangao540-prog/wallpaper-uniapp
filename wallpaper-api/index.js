@@ -1,10 +1,12 @@
 const express = require('express')
 const mysql = require('mysql2')
 const cors = require('cors')
+const path = require('path')
 
 const app = express()
 app.use(cors())
 app.use(express.json())
+app.use('/static', express.static(path.resolve(__dirname, '../static')))
 
 const db = mysql.createConnection({
     host: '127.0.0.1',
