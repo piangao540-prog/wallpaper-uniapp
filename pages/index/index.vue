@@ -49,7 +49,10 @@
 				</template>
 			</common-title>
 			<view class="content">
-				<theme-item v-for="item in 8" ></theme-item>
+				<theme-item
+					v-for="cat in categoryList.slice(0,8)" :key="cat.category"
+					:image="cat.cover" :name="cat.category" :tag="cat.count + '张'"
+				></theme-item>
 				<theme-item :isMore="true" ></theme-item>
 			</view>
 		</view>
@@ -59,11 +62,11 @@
 <script setup lang="ts">
 import {ref, onMounted} from 'vue'
 import {useNavBar} from '@/composables/useNavBar'
-import {getWallpapers, Wallpaper, getLatest,getByCategory} from '@/api/wallpaper'
+import {getWallpapers, Wallpaper, getLatest, getByCategory, getCategories, Category } from '@/api/wallpaper'
 
 const latestWallpaper = ref<Wallpaper[]>([])
 const bannerList = ref<Wallpaper[]>([])
-
+const categoryList = ref<Category[]>([])
 
 const {navBarH} = useNavBar()
 const gotoPerview = () => {
@@ -75,6 +78,7 @@ const gotoPerview = () => {
 onMounted(async() => {
 	latestWallpaper.value = await getLatest()
 	bannerList.value = await getByCategory('Yoneyama Mai')
+	categoryList.value = await getCategories()
 })
 </script>
 
