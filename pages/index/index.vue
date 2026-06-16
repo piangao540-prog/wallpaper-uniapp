@@ -45,15 +45,22 @@
 			<common-title>
 				<template #name>专题精选</template>
 				<template #custom>
-					<navigator url="">More+</navigator>
+					<navigator url="/pages/classify/classify">More+</navigator>
 				</template>
 			</common-title>
 			<view class="content">
-				<theme-item
-					v-for="cat in categoryList.slice(0,8)" :key="cat.category"
-					:image="cat.cover" :name="cat.category" :tag="cat.count + '张'"
-				></theme-item>
-				<theme-item :isMore="true" ></theme-item>
+				<!-- #ifdef H5 -->
+				<navigator class="itemBox" v-for="item in wallpaperList.slice(0, 8)" :key="item.id" :url="'/pages/perview/perview?id=' + item.id">
+					<image :src="item.url" mode="aspectFill"></image>
+					<view class="tag">{{ item.category }}</view>
+				</navigator>
+				<!-- #endif -->
+				<!-- #ifndef H5 -->
+				<navigator class="itemBox" v-for="item in wallpaperList.slice(0, 8)" :key="item.id" :url="'/pages/perview/perview?id=' + item.id">
+					<image :src="item.url" mode="aspectFill"></image>
+					<view class="tag">{{ item.category }}</view>
+				</navigator>
+				<!-- #endif -->
 			</view>
 		</view>
 	</view>
@@ -62,23 +69,27 @@
 <script setup lang="ts">
 import {ref, onMounted} from 'vue'
 import {useNavBar} from '@/composables/useNavBar'
-import {getWallpapers, Wallpaper, getLatest, getByCategory, getCategories, Category } from '@/api/wallpaper'
+import {getWallpapers, Wallpaper, getLatest, getByCategory} from '@/api/wallpaper'
 
 const latestWallpaper = ref<Wallpaper[]>([])
 const bannerList = ref<Wallpaper[]>([])
-const categoryList = ref<Category[]>([])
+const wallpaperList = ref<Wallpaper[]>([])
 
 const {navBarH} = useNavBar()
 const gotoPerview = () => {
-	uni.navigateTo({
-		url:'/pages/perview/perview'
-	})
+	uni.navigateTo({ url:'/pages/perview/perview' })
 }
 
 onMounted(async() => {
 	latestWallpaper.value = await getLatest()
 	bannerList.value = await getByCategory('Yoneyama Mai')
-	categoryList.value = await getCategories()
+	const all = await getWallpapers()
+	const seen = new Set()
+	wallpaperList.value	= all.filter(item =>{
+		if(seen.has(item.category)) return false
+		seen.add(item.category)
+		return true
+	})
 })
 </script>
 
@@ -171,7 +182,6 @@ onMounted(async() => {
 				}
 			}
 			.box:last-child{margin-right: 0rpx;}
-			
 		}
 	}
 	.theme{
@@ -180,6 +190,29 @@ onMounted(async() => {
 			display: grid;
 			gap: 15rpx;
 			grid-template-columns: repeat(3,1fr);
+			.itemBox{
+				height: 340rpx;
+				border-radius: 10rpx;
+				overflow: hidden;
+				position: relative;
+				image{
+					width: 100%;
+					height: 100%;
+				}
+				.tag{
+					position: absolute;
+					padding: 4rpx 10rpx;
+					left: 0;
+					top: 0;
+					background: rgba(234, 82, 62, 0.7);
+					backdrop-filter: blur(20rpx);
+					border-radius: 0 0 20rpx 0;
+					color: #fff;
+					font-size: 22rpx;
+					transform: scale(0.8);
+					transform-origin: left top;
+				}
+			}
 		}
 	}
 }
