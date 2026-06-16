@@ -1,6 +1,6 @@
 <template>
 	<view class="preview">
-		<swiper circular :current="currentIndex">
+		<swiper circular :current="currentIndex" @change="onSwiperChange">
 			<swiper-item v-for="item in wallpaperList">
 				<image @click="maskChang" :src="item.url" mode="aspectFill"></image>
 			</swiper-item>
@@ -50,20 +50,20 @@
 					<view class="content">
 						<view class="row">
 							<view class="label">壁纸ID:</view>
-							<text selectable class="value">1235fsdf43</text>
+							<text selectable class="value">{{ wallpaperList[currentIndex]?.id }}</text>
 						</view>
 						<view class="row">
 							<view class="label">分类:</view>
-							<text selectable class="value">美女</text>
+							<text selectable class="value">{{ wallpaperList[currentIndex].category }}</text>
 						</view>
 						<view class="row">
 							<view class="label">作者:</view>
-							<text selectable class="value">piangao</text>
+							<text selectable class="value">{{ wallpaperList[currentIndex].author }}</text>
 						</view>
 						<view class="row">
 							<view class="label">标签:</view>
 							<view class="value tabs">
-								<view class="tab" v-for="item in 4">标签</view>
+								<view class="tab" v-for="item in (wallpaperList[currentIndex]?.tags || '').split(',')">{{ item }}</view>
 							</view>
 						</view>
 					</view>
@@ -94,6 +94,9 @@ onLoad(async (e: any) => {
     }
 })
 
+const onSwiperChange = (e:any) => {
+	currentIndex.value = e.detail.current
+}
 
 // 信息弹窗
 const openInfo = () => popup.value.open()

@@ -7,6 +7,7 @@ export interface Wallpaper {
     category: string
     author: string
     likes: number
+    tags: string
 }
 
 export interface Category {
