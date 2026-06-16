@@ -1,15 +1,26 @@
 <template>
 	<view class="classList">
 		<view  class="content">
-			<navigator url='/pages/perview/perview' class="item" v-for="item in 9">
-				<image src="@/common/images/preview2.jpg" mode="aspectFill"></image>
+			<navigator url='/pages/perview/perview' class="item" v-for="item in wallpaperList">
+				<image :src="item.url" mode="aspectFill"></image>
 			</navigator>
 		</view>
 	</view>
 </template>
 
-<script setup>
-	
+<script setup lang="ts">
+import {ref} from 'vue'
+// @ts-ignore
+import {onLoad} from '@dcloudio/uni-app'
+import { getByCategory, Wallpaper} from '@/api/wallpaper'
+
+const wallpaperList = ref<Wallpaper[]>([])
+const query = ref('')
+
+onLoad(async (e:any) => {
+	query.value = decodeURIComponent(e?.category || '')
+	wallpaperList.value = await getByCategory(query.value)
+})
 </script>
 
 <style lang="scss" scoped>

@@ -5,6 +5,7 @@
             <theme-item
                 v-for="cat in categoryList" :key="cat.category"
                 :image="cat.cover" :name="cat.category" :tag="cat.count + '张'"
+                :url="'/pages/classList/classList?category=' + encodeURIComponent(cat.category)"
             ></theme-item>
         </view>
     </view>
