@@ -40,6 +40,15 @@ app.get('/api/wallpapers/latest', (req, res) => {
     })
 })
 
+// 获取所有分类和封面图
+app.get('/api/categories',(req,res) => {
+    const sql = 'SELECT category,ANY_VALUE(author) as author, MIN(url) as cover,COUNT(*) as count FROM wallpapers GROUP BY category ORDER BY category'
+    db.query(sql,(err,results) => {
+        if(err) return res.status(500).json({error:err.message})
+        res.json(results)
+    })
+}) 
+
 // 根据种类获取壁纸信息
 app.get('/api/wallpapers/:category', (req, res) => {
     db.query('SELECT * FROM wallpapers WHERE category=?', [req.params.category], (err, results) => {
