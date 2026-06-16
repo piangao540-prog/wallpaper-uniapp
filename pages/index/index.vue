@@ -45,22 +45,21 @@
 			<common-title>
 				<template #name>专题精选</template>
 				<template #custom>
-					<navigator url="/pages/classify/classify">More+</navigator>
+					<navigator url="/pages/classify/classify" open-type="switchTab">More+</navigator>
 				</template>
 			</common-title>
 			<view class="content">
-				<!-- #ifdef H5 -->
 				<navigator class="itemBox" v-for="item in wallpaperList.slice(0, 8)" :key="item.id" :url="'/pages/perview/perview?id=' + item.id">
 					<image :src="item.url" mode="aspectFill"></image>
 					<view class="tag">{{ item.category }}</view>
 				</navigator>
-				<!-- #endif -->
-				<!-- #ifndef H5 -->
-				<navigator class="itemBox" v-for="item in wallpaperList.slice(0, 8)" :key="item.id" :url="'/pages/perview/perview?id=' + item.id">
-					<image :src="item.url" mode="aspectFill"></image>
-					<view class="tag">{{ item.category }}</view>
+				<navigator class="itemBox more" url="/pages/classify/classify" open-type="switchTab">
+					<image class="pic" src="@/common/images/more.jpg" mode="aspectFill"></image>
+					<view class="moreMask">
+						<uni-icons type="more" size="30" color="#fff"></uni-icons>
+						<view class="moreText">更多</view>
+					</view>
 				</navigator>
-				<!-- #endif -->
 			</view>
 		</view>
 	</view>
@@ -76,8 +75,8 @@ const bannerList = ref<Wallpaper[]>([])
 const wallpaperList = ref<Wallpaper[]>([])
 
 const {navBarH} = useNavBar()
-const gotoPerview = (id:number) => {
-	uni.navigateTo({ url:`/pages/perview/perview?id=${id}` })
+const gotoPerview = (id: number) => {
+	uni.navigateTo({ url: `/pages/perview/perview?id=${id}` })
 }
 
 onMounted(async() => {
@@ -85,8 +84,8 @@ onMounted(async() => {
 	bannerList.value = await getByCategory('Yoneyama Mai')
 	const all = await getWallpapers()
 	const seen = new Set()
-	wallpaperList.value	= all.filter(item =>{
-		if(seen.has(item.category)) return false
+	wallpaperList.value = all.filter(item => {
+		if (seen.has(item.category)) return false
 		seen.add(item.category)
 		return true
 	})
@@ -211,6 +210,32 @@ onMounted(async() => {
 					font-size: 22rpx;
 					transform: scale(0.8);
 					transform-origin: left top;
+				}
+				.moreMask{
+					width: 100%;
+					height: 100%;
+					background: rgba(0,0,0,0.15);
+					backdrop-filter: blur(20rpx);
+					-webkit-backdrop-filter: blur(20rpx);
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					position: relative;
+					z-index: 1;
+					.moreText{
+						color: #fff;
+						font-size: 28rpx;
+						margin-top: 10rpx;
+					}
+				}
+			}
+			.itemBox.more{
+				overflow: hidden;
+				.pic{
+					width: 100%;
+					height: 100%;
+					position: absolute;
 				}
 			}
 		}
