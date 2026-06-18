@@ -1,7 +1,7 @@
 <template>
 	<view class="classList">
 		<view  class="content">
-			<navigator url='/pages/perview/perview' class="item" v-for="item in wallpaperList">
+			<navigator  class="item" v-for="item in wallpaperList" :url="'/pages/perview/perview?id=' + item.id">
 				<image :src="item.url" mode="aspectFill"></image>
 			</navigator>
 		</view>
