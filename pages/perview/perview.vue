@@ -11,7 +11,7 @@
 				<view class="goBack" @click="gotoBack">
 					<uni-icons type="back" size="28" color="#fff"></uni-icons>
 				</view>
-				<view class="count">{{ currentIndex }} / {{ wallpaperList.length }}</view>
+				<view class="count">{{ currentIndex + 1}} / {{ wallpaperList.length }}</view>
 			</view>
 			<view class="center">
 				<view class="time">
@@ -77,7 +77,7 @@
 import {ref} from 'vue'
 // @ts-ignore 
 import {onLoad} from '@dcloudio/uni-app'
-import { getById, getWallpapers} from '@/api/wallpaper'
+import { getById, getWallpapers, getByCategory} from '@/api/wallpaper'
 import type { Wallpaper } from '@/api/wallpaper'
 
 const maskState = ref<any>(true)
@@ -89,7 +89,11 @@ const currentIndex = ref(0)
 // 获取壁纸数据
 onLoad(async (e: any) => {
     if (e?.id) {
-		wallpaperList.value =  await getWallpapers()
+		if(e?.category){
+			wallpaperList.value = await getByCategory(e.category)
+		}else{
+			wallpaperList.value =  await getWallpapers()
+		}
 		currentIndex.value = wallpaperList.value.findIndex(a => a.id === Number(e.id))
     }
 })

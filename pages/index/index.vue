@@ -49,7 +49,7 @@
 				</template>
 			</common-title>
 			<view class="content">
-				<navigator class="itemBox" v-for="item in wallpaperList.slice(0, 8)" :key="item.id" :url="'/pages/perview/perview?id=' + item.id">
+				<navigator class="itemBox" v-for="item in wallpaperList.slice(0, 8)" :key="item.id" :url="'/pages/perview/perview?category=' + item.category + '&id=' + item.id">
 					<image :src="item.url" mode="aspectFill"></image>
 					<view class="tag">{{ item.category }}</view>
 				</navigator>
