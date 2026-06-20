@@ -80,15 +80,30 @@ const gotoPerview = (id: number) => {
 }
 
 onMounted(async() => {
-	latestWallpaper.value = await getLatest()
 	bannerList.value = await getByCategory('Yoneyama Mai')
-	const all = await getWallpapers()
-	const seen = new Set()
-	wallpaperList.value = all.filter(item => {
-		if (seen.has(item.category)) return false
-		seen.add(item.category)
-		return true
-	})
+	const cached = uni.getStorageSync('latestWallpaper')
+	if(cached){
+		latestWallpaper.value = cached
+	}else{
+		latestWallpaper.value = await getLatest()
+		uni.setStorageSync('latestWallpaper',latestWallpaper.value)
+	}
+
+	const all = uni.getStorageSync('wallpapers')
+	if(all){
+		wallpaperList.value = all
+	}else{
+		const allDate = await getWallpapers()
+	
+		const seen = new Set()
+		wallpaperList.value = allDate.filter(item => {
+			if (seen.has(item.category)) return false
+			seen.add(item.category)
+			return true
+		})
+		uni.setStorageSync('wallpapers',wallpaperList.value)
+	}
+	
 })
 </script>
 

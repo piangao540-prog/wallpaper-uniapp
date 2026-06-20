@@ -24,8 +24,16 @@ const loading = ref(true)
 
 onLoad(async (e:any) => {
 	query.value = decodeURIComponent(e?.category || '')
-	wallpaperList.value = await getByCategory(query.value)
-	loading.value = false
+	const key = 'classList_' + query.value
+	const cached = uni.getStorageSync(key)
+	if(cached){
+		wallpaperList.value = cached
+		loading.value = false
+	}else{
+		wallpaperList.value = await getByCategory(query.value)
+		uni.setStorageSync(key,wallpaperList.value)
+		loading.value = false
+	}
 })
 </script>
 
