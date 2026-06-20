@@ -11,7 +11,7 @@
 				<view class="goBack" @click="gotoBack">
 					<uni-icons type="back" size="28" color="#fff"></uni-icons>
 				</view>
-				<view class="count">3 / 99</view>
+				<view class="count">{{ currentIndex }} / {{ wallpaperList.length }}</view>
 			</view>
 			<view class="center">
 				<view class="time">
