@@ -1,9 +1,13 @@
 <template>
 	<view class="classList">
-		<view  class="content">
+		<view  class="content" v-if="!loading">
 			<navigator  class="item" v-for="item in wallpaperList" :url="'/pages/perview/perview?id=' + item.id">
 				<image :src="item.url" mode="aspectFill"></image>
 			</navigator>
+		</view>
+		<!-- 骨架屏 -->
+		<view class="content" v-else>
+			<view class="skeleton" v-for="i in 9" :key="i"></view>
 		</view>
 	</view>
 </template>
@@ -16,10 +20,12 @@ import { getByCategory, Wallpaper} from '@/api/wallpaper'
 
 const wallpaperList = ref<Wallpaper[]>([])
 const query = ref('')
+const loading = ref(true)
 
 onLoad(async (e:any) => {
 	query.value = decodeURIComponent(e?.category || '')
 	wallpaperList.value = await getByCategory(query.value)
+	loading.value = false
 })
 </script>
 
@@ -39,5 +45,18 @@ onLoad(async (e:any) => {
 			}
 		}
 	}
+}
+// 骨架屏
+.skeleton{
+    height: 440rpx;
+    background: linear-gradient(90deg, #e8e8e8 25%, #f2f2f2 50%, #e8e8e8 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+    border-radius: 4rpx;
+}
+
+@keyframes shimmer{
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
 }
 </style>
