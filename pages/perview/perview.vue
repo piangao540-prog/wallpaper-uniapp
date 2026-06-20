@@ -1,8 +1,8 @@
 <template>
 	<view class="preview">
 		<swiper circular :current="currentIndex" @change="onSwiperChange">
-			<swiper-item v-for="item in wallpaperList">
-				<image @click="maskChang" :src="item.url" mode="aspectFill"></image>
+			<swiper-item v-for="(item,index) in wallpaperList">
+				<image v-if="readImg.includes(index)" @click="maskChang" :src="item.url" mode="aspectFill"></image>
 			</swiper-item>
 		</swiper>
 		<!-- 遮罩层 -->
@@ -85,6 +85,7 @@ const popup = ref<any>(null)
 const isFavorited = ref(false)
 const wallpaperList = ref<Wallpaper[]>([])
 const currentIndex = ref(0)
+const readImg = ref<number[]>([])
 
 // 获取壁纸数据
 onLoad(async (e: any) => {
@@ -95,11 +96,14 @@ onLoad(async (e: any) => {
 			wallpaperList.value =  await getWallpapers()
 		}
 		currentIndex.value = wallpaperList.value.findIndex(a => a.id === Number(e.id))
+		readImgFun()
     }
 })
 
+// 切换页面
 const onSwiperChange = (e:any) => {
 	currentIndex.value = e.detail.current
+	readImgFun()
 }
 
 // 信息弹窗
@@ -123,6 +127,22 @@ const maskChang = () => {
 // 返回
 const gotoBack = () =>{
 	uni.navigateBack()
+}
+
+function readImgFun(){
+	const total = wallpaperList.value.length
+	if(total === 0) return
+	const ids = [
+		(currentIndex.value - 1 + total) % total,
+		currentIndex.value,
+		(currentIndex.value + 1) % total
+	]
+	ids.forEach(i => {
+		if(!readImg.value.includes(i)){
+			readImg.value.push(i)
+		}
+	})	
+
 }
 </script>
 
