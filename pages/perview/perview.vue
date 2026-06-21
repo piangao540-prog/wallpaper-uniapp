@@ -6,7 +6,7 @@
 			</swiper-item>
 		</swiper>
 		<!-- 遮罩层 -->
-		<view class="mask" v-if="maskState" @click="maskChang">
+		<view class="mask" v-if="maskState" @click="maskChang" :style="{paddingTop:(statusBarHeight + 40) + 'px'}">
 			<view class="top">
 				<view class="goBack" @click="gotoBack">
 					<uni-icons type="back" size="28" color="#fff"></uni-icons>
@@ -54,11 +54,11 @@
 						</view>
 						<view class="row">
 							<view class="label">分类:</view>
-							<text selectable class="value">{{ wallpaperList[currentIndex].category }}</text>
+							<text selectable class="value">{{ wallpaperList[currentIndex]?.category }}</text>
 						</view>
 						<view class="row">
 							<view class="label">作者:</view>
-							<text selectable class="value">{{ wallpaperList[currentIndex].author }}</text>
+							<text selectable class="value">{{ wallpaperList[currentIndex]?.author }}</text>
 						</view>
 						<view class="row">
 							<view class="label">标签:</view>
@@ -87,9 +87,13 @@ const isFavorited = ref(false)
 const wallpaperList = ref<Wallpaper[]>([])
 const currentIndex = ref(0)
 const readImg = ref<number[]>([])
+const statusBarHeight = ref(20)
 
 // 获取壁纸数据
 onLoad(async (e: any) => {
+	// #ifdef MP
+	statusBarHeight.value = uni.getSystemInfoSync().statusBarHeight ?? 20
+	// #endif
     if (e?.id) {
 		if(e?.category){
 			wallpaperList.value = await getByCategory(e.category)
@@ -153,7 +157,6 @@ const downloadImg = throttle(() => {
 				},
 				fail: (err) => {
 					uni.hideLoading()
-					console.log(JSON.stringify(err))
 					if (err.errMsg?.includes('auth deny')) {
 						uni.showModal({
 							title: '提示',
