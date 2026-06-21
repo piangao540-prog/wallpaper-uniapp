@@ -32,9 +32,11 @@ onShareAppMessage(() => {
 	}
 })
 
+// 分享朋友圈
 onShareTimeline(() => {
 	return {
-		title: '这页壁纸好看'
+		title: '这页壁纸好看',
+		query: 'category' + query.value
 	}
 })
 

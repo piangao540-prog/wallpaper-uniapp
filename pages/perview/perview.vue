@@ -186,7 +186,8 @@ onShareAppMessage(() => {
 // 分享朋友圈
 onShareTimeline(() => {
 	return {
-		title: '这张壁纸好好看'
+		title: '这张壁纸好好看',
+		query: 'id=' + wallpaperList.value[currentIndex.value]?.id
 	}
 })
 
