@@ -80,6 +80,8 @@ import {onLoad} from '@dcloudio/uni-app'
 import { getById, getWallpapers, getByCategory} from '@/api/wallpaper'
 import type { Wallpaper } from '@/api/wallpaper'
 import {throttle} from '@/utils/throttle'
+// @ts-ignore
+import {onShareAppMessage, onShareTimeline} from '@dcloudio/uni-app'
 
 const maskState = ref<any>(true)
 const popup = ref<any>(null)
@@ -172,6 +174,21 @@ const downloadImg = throttle(() => {
 	})
 	// #endif
 },2000)
+
+// 分享好友
+onShareAppMessage(() => {
+	return {
+		title: '这张壁纸好好看',
+		path: `/pages/perview/perview?id=${wallpaperList.value[currentIndex.value]?.id}`
+	}
+})
+
+// 分享朋友圈
+onShareTimeline(() => {
+	return {
+		title: '这张壁纸好好看'
+	}
+})
 
 // 遮罩切换
 const maskChang = () => {

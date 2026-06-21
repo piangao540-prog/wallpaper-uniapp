@@ -17,10 +17,26 @@ import {ref} from 'vue'
 // @ts-ignore
 import {onLoad} from '@dcloudio/uni-app'
 import { getByCategory, Wallpaper} from '@/api/wallpaper'
+// @ts-ignore
+import {onShareAppMessage,onShareTimeline} from '@dcloudio/uni-app'
 
 const wallpaperList = ref<Wallpaper[]>([])
 const query = ref('')
 const loading = ref(true)
+
+// 分享好友
+onShareAppMessage(() => {
+	return {
+		title: '这页壁纸好看',
+		path: '/pages/classList/classList?category=' + query.value
+	}
+})
+
+onShareTimeline(() => {
+	return {
+		title: '这页壁纸好看'
+	}
+})
 
 onLoad(async (e:any) => {
 	query.value = decodeURIComponent(e?.category || '')

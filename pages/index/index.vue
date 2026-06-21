@@ -69,6 +69,8 @@
 import {ref, onMounted} from 'vue'
 import {useNavBar} from '@/composables/useNavBar'
 import {getWallpapers, Wallpaper, getLatest, getByCategory} from '@/api/wallpaper'
+// @ts-ignore
+import {onShareAppMessage,onShareTimeline} from '@dcloudio/uni-app'
 
 const latestWallpaper = ref<Wallpaper[]>([])
 const bannerList = ref<Wallpaper[]>([])
@@ -78,6 +80,21 @@ const {navBarH} = useNavBar()
 const gotoPerview = (id: number) => {
 	uni.navigateTo({ url: `/pages/perview/perview?id=${id}` })
 }
+
+// 分享好友
+onShareAppMessage(()=> {
+	return {
+		title: '精美壁纸分享',
+		path: '/pages/index/index'
+	}
+})
+
+// 分享朋友圈
+onShareTimeline(() => {
+	return {
+		title: '好看壁纸'
+	}
+})
 
 onMounted(async() => {
 	bannerList.value = await getByCategory('Yoneyama Mai')
