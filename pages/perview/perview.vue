@@ -146,15 +146,24 @@ const downloadImg = () => {
 		success:(res) => {
 			uni.saveImageToPhotosAlbum({
 				filePath: res.tempFilePath,
-				complete:() => {
+				success:() => {
 					uni.hideLoading()
 					uni.showToast({title:'保存成功',icon:'success'})
+				},
+				fail: (err) => {
+					uni.hideLoading()
+					console.log(JSON.stringify(err))
+					if (err.errMsg?.includes('auth deny')) {
+						uni.showModal({
+							title: '提示',
+							content: '需要相册权限才能保存壁纸',
+							success: (r) => r.confirm && uni.openSetting()
+						})
+					} else {
+						uni.showToast({ title: '保存失败', icon: 'error' })
+					}
 				}
 			})
-		},
-		fail:() => {
-			uni.hideLoading()
-			uni.showToast({title:'下载失败',icon:'error'})
 		}
 	})
 	// #endif
