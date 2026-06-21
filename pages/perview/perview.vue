@@ -79,6 +79,7 @@ import {ref} from 'vue'
 import {onLoad} from '@dcloudio/uni-app'
 import { getById, getWallpapers, getByCategory} from '@/api/wallpaper'
 import type { Wallpaper } from '@/api/wallpaper'
+import {throttle} from '@/utils/throttle'
 
 const maskState = ref<any>(true)
 const popup = ref<any>(null)
@@ -115,7 +116,7 @@ const openInfo = () => popup.value.open()
 const closeInfo = () => popup.value.close()
 
 // 收藏
-const toggleFavorite = () => {
+const toggleFavorite = throttle(() => {
 	const currentId = wallpaperList.value[currentIndex.value].id
 	let favs: number[] = uni.getStorageSync('favorites') || []
 	if(favs.includes(currentId)){
@@ -128,10 +129,10 @@ const toggleFavorite = () => {
 	uni.setStorageSync('favorites',favs)
 	uni.showToast({title:isFavorited.value ? '已收藏' : '已取消收藏',icon:'none'})
 
-}
+},300)
 
 // 下载壁纸
-const downloadImg = () => {
+const downloadImg = throttle(() => {
 	const url = wallpaperList.value[currentIndex.value].url
 	// #ifdef H5
 	const a = document.createElement('a')
@@ -167,7 +168,7 @@ const downloadImg = () => {
 		}
 	})
 	// #endif
-}
+},2000)
 
 // 遮罩切换
 const maskChang = () => {
