@@ -198,7 +198,16 @@ const maskChang = () => {
 
 // 返回
 const gotoBack = () =>{
-	uni.navigateBack()
+	uni.navigateBack({
+		success: () =>{
+
+		},
+		fail: (err) => {
+			uni.reLaunch({
+				url: '/pages/index/index'
+			})
+		}
+	})
 }
 
 function readImgFun(){

@@ -15,10 +15,8 @@
 <script setup lang="ts">
 import {ref} from 'vue'
 // @ts-ignore
-import {onLoad} from '@dcloudio/uni-app'
+import {onLoad,onUnload,onShareAppMessage,onShareTimeline} from '@dcloudio/uni-app'
 import { getByCategory, Wallpaper} from '@/api/wallpaper'
-// @ts-ignore
-import {onShareAppMessage,onShareTimeline} from '@dcloudio/uni-app'
 
 const wallpaperList = ref<Wallpaper[]>([])
 const query = ref('')
@@ -36,7 +34,7 @@ onShareAppMessage(() => {
 onShareTimeline(() => {
 	return {
 		title: '这页壁纸好看',
-		query: 'category' + query.value
+		query: 'category=' + query.value
 	}
 })
 
@@ -52,6 +50,10 @@ onLoad(async (e:any) => {
 		uni.setStorageSync(key,wallpaperList.value)
 		loading.value = false
 	}
+})
+
+onUnload(() => {
+    uni.removeStorageSync('classList_' + query.value)
 })
 </script>
 
