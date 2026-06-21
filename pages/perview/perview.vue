@@ -97,6 +97,10 @@ onLoad(async (e: any) => {
 		}
 		currentIndex.value = wallpaperList.value.findIndex(a => a.id === Number(e.id))
 		readImgFun()
+
+		//检查是否收藏
+		const favs: number[] = uni.getStorageSync('favorites') || []
+		isFavorited.value = favs.includes(Number(e.id))
     }
 })
 
@@ -112,11 +116,18 @@ const closeInfo = () => popup.value.close()
 
 // 收藏
 const toggleFavorite = () => {
-	isFavorited.value = !isFavorited.value
-	uni.showToast({
-		title: isFavorited.value ? '已收藏' : '已取消收藏',
-		icon: 'none'
-	})
+	const currentId = wallpaperList.value[currentIndex.value].id
+	let favs: number[] = uni.getStorageSync('favorites') || []
+	if(favs.includes(currentId)){
+		favs = favs.filter(id => id !== currentId)
+		isFavorited.value = false
+	}else{
+		favs.push(currentId)
+		isFavorited.value = true
+	}
+	uni.setStorageSync('favorites',favs)
+	uni.showToast({title:isFavorited.value ? '已收藏' : '已取消收藏',icon:'none'})
+
 }
 
 // 遮罩切换
