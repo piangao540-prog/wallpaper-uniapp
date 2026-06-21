@@ -30,7 +30,7 @@
 					<uni-icons :type="isFavorited ? 'star-filled' : 'star'" size="25" :color="isFavorited ? '#f5c842' : '#fff'"></uni-icons>
 					<view class="text">收藏</view>
 				</view>
-				<view class="box">
+				<view class="box" @click="downloadImg">
 					<uni-icons type="download" size="25" color="#fff"></uni-icons>
 					<view class="text">下载</view>
 				</view>
@@ -128,6 +128,36 @@ const toggleFavorite = () => {
 	uni.setStorageSync('favorites',favs)
 	uni.showToast({title:isFavorited.value ? '已收藏' : '已取消收藏',icon:'none'})
 
+}
+
+// 下载壁纸
+const downloadImg = () => {
+	const url = wallpaperList.value[currentIndex.value].url
+	// #ifdef H5
+	const a = document.createElement('a')
+	a.href = url
+	a.download = wallpaperList.value[currentIndex.value].title + '.jpg'
+	a.click()
+	// #endif
+	// #ifdef MP
+	uni.showLoading({title:'下载中...'})
+	uni.downloadFile({
+		url:'http://172.22.37.39:3000' + url,
+		success:(res) => {
+			uni.saveImageToPhotosAlbum({
+				filePath: res.tempFilePath,
+				complete:() => {
+					uni.hideLoading()
+					uni.showToast({title:'保存成功',icon:'success'})
+				}
+			})
+		},
+		fail:() => {
+			uni.hideLoading()
+			uni.showToast({title:'下载失败',icon:'error'})
+		}
+	})
+	// #endif
 }
 
 // 遮罩切换
