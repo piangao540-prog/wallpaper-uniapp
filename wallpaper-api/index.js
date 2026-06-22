@@ -73,16 +73,32 @@ app.get('/api/wallpapers/:category', (req, res) => {
 })
 
 // 验证token中间件
-const auth = (req,res,next) => {
+const auth = (req, res, next) => {
     const token = req.headers.authorization?.split(' ')[1]
-    if(!token) return res.status(401).json({error:'未登录'})
-    try{
-        req.user = jwt.verify(token,JWT_SECRET)
+    if (!token) return res.status(401).json({ error: '未登录' })
+    try {
+        req.user = jwt.verify(token, JWT_SECRET)
         next()
-    }catch{
-        res.status(401).json({error:'Token无效'})
+    } catch {
+        res.status(401).json({ error: 'Token无效' })
     }
 }
+
+// 注册
+app.post('/api/register', (req, res) => {
+    const { username, password } = req.body
+    if (!username || !password) return res.status(400).json({ error: '请输入用户名和密码' })
+    bcrypt.hash(password, 10, (err, hash) => {
+        if (err) return res.status(500).json({ error: err.message })
+        db.query('INSERT  INTO users (username,password) VALUES  (?,?)', [username, hash], (err) => {
+            if (err) {
+                if (err.code === 'ER_DUP_ENTRY') return res.status(400).json({ error: '用户名已存在' })
+                return res.status(500).json({ error: err.message })
+            }
+            res.json({ success: true, message: '注册成功' })
+        })
+    })
+})
 
 app.listen(3000, () => {
     console.log('api')
