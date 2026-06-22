@@ -2,11 +2,15 @@ const express = require('express')
 const mysql = require('mysql2')
 const cors = require('cors')
 const path = require('path')
+const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 
 const app = express()
 app.use(cors())
 app.use(express.json())
 app.use('/static', express.static(path.resolve(__dirname, '../static')))
+
+const JWT_SECRET = 'wallpaper_secret_key_2026'
 
 const db = mysql.createConnection({
     host: '127.0.0.1',
@@ -68,7 +72,17 @@ app.get('/api/wallpapers/:category', (req, res) => {
     })
 })
 
-
+// 验证token中间件
+const auth = (req,res,next) => {
+    const token = req.headers.authorization?.split(' ')[1]
+    if(!token) return res.status(401).json({error:'未登录'})
+    try{
+        req.user = jwt.verify(token,JWT_SECRET)
+        next()
+    }catch{
+        res.status(401).json({error:'Token无效'})
+    }
+}
 
 app.listen(3000, () => {
     console.log('api')
