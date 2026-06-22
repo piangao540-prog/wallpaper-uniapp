@@ -1,9 +1,9 @@
 <template>
 	<view class="userLayout pageBg" :style="{ paddingTop: navBarH + 'px' }">
-		<custom-nav-bar title="个人中心" bgColor="#fff" fontColor="#333"></custom-nav-bar>
+		<!-- <custom-nav-bar title="个人中心" bgColor="#fff" fontColor="#333"></custom-nav-bar> -->
 		<view class="userInfo">
 			<view class="avatar">
-				<image src="@/static/images/xxmLogo.png" mode="aspectFill"></image>
+				<image src="@/static/images/image_354172502724670.png" mode="aspectFill"></image>
 			</view>
 			<view class="ip">100.100.110.100</view>
 			<view class="address">来自于：山东</view>
