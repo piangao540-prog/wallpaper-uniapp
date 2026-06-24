@@ -1,11 +1,18 @@
-const BASE_URL = 'http://172.22.37.39:3000/api'
+const BASE_URL = 'http://localhost:3000/api'
 
-export function request<T>(url: string, options?: UniApp.RequestOptions): Promise<T> {
+export function request<T>(url: string, options?: any): Promise<T> {
 	return new Promise((resolve, reject) => {
 		uni.request({
 			url: BASE_URL + url,
+			header: {"Content-Type": "application/json"},
 			...options,
-			success: res => resolve(res.data as T),
+			success: res => {
+				if (res.statusCode >= 400) {
+					reject(res)
+				} else {
+					resolve(res.data as T)
+				}
+			},
 			fail: reject
 		})
 	})

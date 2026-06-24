@@ -149,7 +149,7 @@ const downloadImg = throttle(() => {
 	// #ifdef MP
 	uni.showLoading({title:'下载中...'})
 	uni.downloadFile({
-		url:'http://172.22.37.39:3000' + url,
+		url:'http://localhost:3000' + url,
 		success:(res) => {
 			uni.saveImageToPhotosAlbum({
 				filePath: res.tempFilePath,
