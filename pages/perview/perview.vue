@@ -80,6 +80,7 @@ import {onLoad} from '@dcloudio/uni-app'
 import { getById, getWallpapers, getByCategory} from '@/api/wallpaper'
 import type { Wallpaper } from '@/api/wallpaper'
 import {throttle} from '@/utils/throttle'
+import {toggleFavorite as toggleFavoriteApi} from '@/api/favorite'
 // @ts-ignore
 import {onShareAppMessage, onShareTimeline} from '@dcloudio/uni-app'
 
@@ -122,20 +123,30 @@ const openInfo = () => popup.value.open()
 const closeInfo = () => popup.value.close()
 
 // 收藏
-const toggleFavorite = throttle(() => {
-	const currentId = wallpaperList.value[currentIndex.value].id
-	let favs: number[] = uni.getStorageSync('favorites') || []
-	if(favs.includes(currentId)){
-		favs = favs.filter(id => id !== currentId)
-		isFavorited.value = false
-	}else{
-		favs.push(currentId)
-		isFavorited.value = true
+const toggleFavorite = throttle(async () => {
+	const token = uni.getStorageSync("token")
+	if (token) {
+		try {
+			const res = await toggleFavoriteApi(wallpaperList.value[currentIndex.value].id)
+			isFavorited.value = res.favorited
+			uni.showToast({title: res.favorited ? "已收藏" : "已取消收藏", icon: "none"})
+		} catch {
+			uni.showToast({title: "操作失败", icon: "none"})
+		}
+	} else {
+		const currentId = wallpaperList.value[currentIndex.value].id
+		let favs: number[] = uni.getStorageSync("favorites") || []
+		if (favs.includes(currentId)) {
+			favs = favs.filter(id => id !== currentId)
+			isFavorited.value = false
+		} else {
+			favs.push(currentId)
+			isFavorited.value = true
+		}
+		uni.setStorageSync("favorites", favs)
+		uni.showToast({title: isFavorited.value ? "已收藏" : "已取消收藏", icon: "none"})
 	}
-	uni.setStorageSync('favorites',favs)
-	uni.showToast({title:isFavorited.value ? '已收藏' : '已取消收藏',icon:'none'})
-
-},300)
+}, 300)
 
 // 下载壁纸
 const downloadImg = throttle(() => {
