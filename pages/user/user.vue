@@ -5,8 +5,8 @@
 			<view class="avatar">
 				<image src="@/static/images/image_354172502724670.png" mode="aspectFill"></image>
 			</view>
-			<view class="ip">100.100.110.100</view>
-			<view class="address">来自于：山东</view>
+			<view class="nickname" @click="goLogin">{{ userInfo ? userInfo.username : '点击登录' }}</view>
+			<view class="desc">{{ userInfo ? '已登录' : '登录后享受更多功能' }}</view>
 		</view>
 		<view class="selection">
 			<view class="list">
@@ -54,9 +54,14 @@
 	</view>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {ref} from 'vue'
+// @ts-ignore
+import {onShow} from '@dcloudio/uni-app'
 import { useNavBar } from '@/composables/useNavBar'
+
+const userInfo = ref<any>(null)
+
 const topList = ref([
   { icon: 'upload', text: '我的下载', value: '334',page: '/pages/classList/classList' },
   { icon: 'star',   text: '我的收藏', value: '128',page: '/pages/classList/classList' },
@@ -74,12 +79,22 @@ const phone = () => {
 })
 }
 
-const goPage = (url) => {
+const goPage = (url?:string) => {
 	if (url) uni.navigateTo({url})
 }
 
 // 标题距离计算
 const {navBarH} = useNavBar()
+
+onShow(() => {
+	const user = uni.getStorageSync('user')
+	const token = uni.getStorageSync('token')
+	if(user || token) userInfo.value = user
+})
+
+const goLogin = () => {
+	if(!userInfo.value) uni.navigateTo({url: '/pages/login/login'})
+}
 </script>
 
 <style lang="scss" scoped>
@@ -110,6 +125,17 @@ const {navBarH} = useNavBar()
 		color: #aaa;
 		font-size: 28rpx;
 	}
+	.nickname{
+    color: #333;
+    font-size: 44rpx;
+    padding: 20rpx 0 5rpx;
+    font-weight: 500;
+	}
+	.desc{
+		color: #aaa;
+		font-size: 28rpx;
+	}
+
 	.selection{
 		width: 690rpx;
 		margin: 50rpx auto;

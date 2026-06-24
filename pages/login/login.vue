@@ -30,12 +30,14 @@ const handleSubmit = async () => {
 			uni.setStorageSync('token',res.token)
 			uni.setStorageSync('user',res.user)
 			uni.showToast({title:'登录成功',icon:'success'})
+			setTimeout(()=> uni.navigateBack(),1000)
 		}else{
 			await register({username:username.value,password:password.value})
 			uni.showToast({title:'注册成功',icon:'success'})
 		}
 	}catch (err: any) {
     	uni.showToast({title: err?.data?.error || '操作失败', icon: 'none'})
+		
 	}
 }
 </script>
