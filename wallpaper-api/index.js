@@ -143,6 +143,20 @@ app.post('/api/favorite', auth, (req, res) => {
     })
 })
 
+// 获取收藏列表
+app.get('/api/favorites',auth,(req,res) => {
+    db.query('SELECT wallpaper_id FROM favorites WHERE user_id=? ORDER BY created_at DESC',[req.user.id],(err,results) => {
+        if(err) return res.status(500).json({error:err.message})
+
+        if(results.length === 0) return res.json([])
+        const ids = results.map(r => r.wallpaper_id)
+        db.query('SELECT * FROM wallpapers WHERE id IN (?)',[ids],(err,results) => {
+            if (err) return res.status(500).json({ error: err.message })
+            res.json(wallpapers)
+        })
+    })
+})
+
 app.listen(3000, () => {
     console.log('api')
 })
