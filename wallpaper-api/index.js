@@ -88,6 +88,7 @@ const auth = (req, res, next) => {
 app.post('/api/register', (req, res) => {
     const { username, password } = req.body
     if (!username || !password) return res.status(400).json({ error: '请输入用户名和密码' })
+    // 加密密码
     bcrypt.hash(password, 10, (err, hash) => {
         if (err) return res.status(500).json({ error: err.message })
         db.query('INSERT INTO users (username,password) VALUES  (?,?)', [username, hash], (err) => {
@@ -109,6 +110,7 @@ app.post('/api/login', (req, res) => {
         if (results.length === 0) return res.status(400).json({ error: '用户不存在' })
 
         const user = results[0]
+        // 判断token
         bcrypt.compare(password, user.password, (err, match) => {
             if (err) return res.status(500).json({ error: err.message })
             if (!match) return res.status(400).json({ error: '密码错误' })
@@ -116,6 +118,28 @@ app.post('/api/login', (req, res) => {
             const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' })
             res.json({ token, user: { id: user.id, username: user.username } })
         })
+    })
+})
+
+// 收藏/取消收藏 接口
+app.post('/api/favorite', auth, (req, res) => {
+    const userId = req.user.id
+    const wallpaperId = req.body.wallpaperId
+
+    // 判断是否收藏
+    db.query('SELECT id FROM favorites WHERE user_id=? AND wallpaper_id=?', [userId, wallpaperId], (err,results) => {
+        if (err) return res.status(500).json({ error: err.message })
+        if (results.length > 0){
+            db.query('DELETE FROM favorites WHERE user_id=? AND wallpaper_id=?',[userId,wallpaperId],(err) => {
+                if (err) return res.status(500).json({ error: err.message })
+                res.json({ favorited: false })
+            })
+        }else{
+            db.query('INSERT INTO favorites (user_id, wallpaper_id) VALUES (?,?)',[userId,wallpaperId],(err) => {
+                if (err) return res.status(500).json({ error: err.message })
+                res.json({ favorited: true })
+            })
+        }
     })
 })
 
