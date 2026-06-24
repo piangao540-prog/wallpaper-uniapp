@@ -90,12 +90,32 @@ app.post('/api/register', (req, res) => {
     if (!username || !password) return res.status(400).json({ error: '请输入用户名和密码' })
     bcrypt.hash(password, 10, (err, hash) => {
         if (err) return res.status(500).json({ error: err.message })
-        db.query('INSERT  INTO users (username,password) VALUES  (?,?)', [username, hash], (err) => {
+        db.query('INSERT INTO users (username,password) VALUES  (?,?)', [username, hash], (err) => {
             if (err) {
                 if (err.code === 'ER_DUP_ENTRY') return res.status(400).json({ error: '用户名已存在' })
                 return res.status(500).json({ error: err.message })
             }
             res.json({ success: true, message: '注册成功' })
+        })
+    })
+})
+
+// 登录
+app.post('/api/login', (req, res) => {
+    const { username, password } = req.body
+    if (!username || !password) return res.status(400).json({ error: '请输入用户名和密码' })
+    db.query('SELECT * FROM users WHERE username=?', [username], (err, results) => {
+        console.log('results:', JSON.stringify(results))
+        if (err) return res.status(500).json({ error: err.message })
+        if (results.length === 0) return res.status(400).json({ error: '用户不存在' })
+
+        const user = results[0]
+        bcrypt.compare(password, user.password, (err, match) => {
+            if (err) return res.status(500).json({ error: err.message })
+            if (!match) return res.status(400).json({ error: '密码错误' })
+
+            const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' })
+            res.json({ token, user: { id: user.id, username: user.username } })
         })
     })
 })
